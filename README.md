@@ -34,7 +34,7 @@ split your screen in two, making the game difficult to play.
 
 Getting Started
 
-Install all .h, .cc, and Makefile. Enter $make to compile and then enter $./reversi to play the game on terminal. The following are the commands to play the game:
+Install all .h, .cc,files and link and compile on terminal. The following are the commands to play the game:
 
  "left" moves the current block one cell to the left. If this is not possible (left edge of the board,
 or block in the way), the command has no effect.
