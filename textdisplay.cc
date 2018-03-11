@@ -19,7 +19,11 @@ void TextDisplay::notify(Subject &whoNotified) {
     char type = info.type;
     bool empty = info.empty;
     if (empty) {
-        theDisplay[x][y] = ' ';
+        if (type == '?') {
+            theDisplay[x][y] = '?';
+        } else {
+          theDisplay[x][y] = ' ';
+        }
     } else {
         theDisplay[x][y] = type;
     }

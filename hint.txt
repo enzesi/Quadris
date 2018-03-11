@@ -1,0 +1,1 @@
+20ri drop 5ri drop 6ri drop 8ri clock drop 2ri 2clock drop 3clock drop count 20ri drop 4ri clock drop 6ri drop clock 2ri drop r drop 20ri 2clock drop 6ri drop r 2clock drop

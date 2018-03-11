@@ -1,18 +1,45 @@
 #include "board.h"
+#include <iostream>
 using namespace std;
 
-Board::~Board(){
-    delete td;
-    delete ob;
+
+Board::~Board(){}
+
+void Board::reset() {
+    theBoard.clear();
+    score = 0;
+}
+
+int Board::getScore() {
+    return score;
+}
+
+void Board::deletehint(vector<Posn> p) { // clean the hint temporarily;
+    for (int i = 0; i < 4; i++) {
+        Info info = theBoard[p[i].x][p[i].y].getInfo();
+        if (info.type == '?') {
+            theBoard[p[i].x][p[i].y].settype(' ');
+        }
+    }
+}
+
+
+int Board::getEmpty(int line) {
+    int x = 0;
+    for (int i = 0; i < 11; i++) {
+        if (theBoard[line][i].getInfo().empty) {
+            x++;
+        }
+    }
+    return x;
 }
 
 void Board::init() {
     int size = theBoard.size();
     if (size != 0) {
-        delete td;
         theBoard.clear();
     }
-    td = new TextDisplay();
+    td = make_shared<TextDisplay>();// set all the cell properly;
     for (int i = 0; i < 18; i++) {
         vector <Cell> c;
         for (int j = 0; j < 11; j++) {
@@ -24,13 +51,13 @@ void Board::init() {
     }
 }
 
-void Board::setObserver(Observer * ob) {
-  for (int i = 0; i < 18; i++) {
-      for (int j = 0; j < 11; j++) {
-          theBoard[i][j].attach(ob);
-      }
-  }
-  this->ob = ob;
+void Board::setObserver(shared_ptr<Observer> ob) { // set the graphicsdisplay
+    for (int i = 0; i < 18; i++) {                 // to every cell;
+        for (int j = 0; j < 11; j++) {
+            theBoard[i][j].attach(ob);
+        }
+    }
+    this->ob = ob;
 }
 
 bool Board::check(vector<Posn> p) {
@@ -49,18 +76,54 @@ bool Board::check(vector<Posn> p) {
 
 void Board::clear(vector<Posn> p) {
     if(p.size() == 1) {
-      theBoard[p[0].x][p[0].y].setempty(true);
-      return;
+        theBoard[p[0].x][p[0].y].setempty(true);
+        return;
     }
     for (int i = 0; i < 4; i++) {
         theBoard[p[i].x][p[i].y].setempty(true);
     }
 }
 
+void Board::tempclean(vector<Posn> p) {
+    if(p.size() == 1) {
+        theBoard[p[0].x][p[0].y].cleartemp();
+        return;
+    }
+    for (int i = 0; i < 4; i++) {
+        theBoard[p[i].x][p[i].y].cleartemp();
+    }
+}
+
+void Board::setback(std::vector<Posn> p) {
+    for (int i = 0; i < 4; i++) {
+        theBoard[p[i].x][p[i].y].setempty(false);
+    }
+}
+
+bool Board::checkempty(Posn p) {
+    return theBoard[p.x][p.y].getempty();
+}
+
 void Board::set(std::vector<Posn> p, char type) {
     if(p.size() == 1) {
         theBoard[p[0].x][p[0].y].setempty(false);
         theBoard[p[0].x][p[0].y].settype(type);
+        return;
+    }
+    if (type == '?') {
+        if (theBoard[p[0].x][p[0].y].getempty()){
+            theBoard[p[0].x][p[0].y].settype(type);
+        }
+        if (theBoard[p[1].x][p[1].y].getempty()){
+            theBoard[p[1].x][p[1].y].settype(type);
+        }
+        if (theBoard[p[2].x][p[2].y].getempty()){
+            theBoard[p[2].x][p[2].y].settype(type);
+        }
+        
+        if (theBoard[p[3].x][p[3].y].getempty()){
+            theBoard[p[3].x][p[3].y].settype(type);
+        }
         return;
     }
     for (int i = 0; i < 4; i++) {
@@ -91,14 +154,14 @@ void Board::checkHiScore() {
 }
 
 void Board::Remove(int ith) {
-  for (int i = 0; i < 18; i++) {
-      for (int j = 0; j < 11; j++) {
-          Info info = theBoard[i][j].getInfo();
-          if (info.ith == ith) {
-            theBoard[i][j].setempty(true);
-          }
-      }
-  }
+    for (int i = 0; i < 18; i++) {
+        for (int j = 0; j < 11; j++) {
+            Info info = theBoard[i][j].getInfo();
+            if (info.ith == ith) {
+                theBoard[i][j].setempty(true);
+            }
+        }
+    }
 }
 
 int Board::getHiscore() {
@@ -109,8 +172,10 @@ void Board::setHiScore(int x) {
     Hi_Score = x;
 }
 
-vector<int> *Board::clean() {
-    vector<int> *v = new vector<int>;
+unique_ptr<vector<int>> Board::clean() {
+    unique_ptr<vector<int>> v;
+    v = make_unique<vector<int>>();
+    int lines = 0;
     for (int i = 17; i >= 0; i--) {
         bool full = true;
         for (int j = 0; j < 11; j++) {
@@ -121,7 +186,7 @@ vector<int> *Board::clean() {
             }
         }
         if (full) {
-            score += (1 + level) * (1 + level);
+            lines++;
             for (int j = 0; j < 11; j++) {
                 Info info = theBoard[i][j].getInfo();
                 v->push_back(info.ith);
@@ -138,6 +203,9 @@ vector<int> *Board::clean() {
             }
             i++;
         }
+    }
+    if (lines != 0) {
+        score += (lines + level) * (lines + level);
     }
     return v;
 }

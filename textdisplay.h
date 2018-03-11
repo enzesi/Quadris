@@ -2,11 +2,14 @@
 #define TEXTDISPLAY_H
 #include <iostream>
 #include <vector>
-#include "observer.h"
-#include "info.h"
+#include <memory>
 #include "subject.h"
-class Cell;
+#include "info.h"
 
+
+class Observer;
+
+class Cell;
 
 class TextDisplay: public Observer {
     std::vector<std::vector<char>> theDisplay;

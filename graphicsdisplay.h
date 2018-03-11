@@ -8,11 +8,17 @@
 class Cell;
 
 class GraphicsDisplay: public Observer {
-  const int gridSizex, gridSizey, winSizex, winSizey;
-  Xwindow xw;
- public:
-  GraphicsDisplay(int gridSizex, int gridSizey, int winSizex, int winSizey);
-
-  void notify(Subject &whoNotified) override;
+    const int gridSizex, gridSizey, winSizex, winSizey;
+    Xwindow xw;
+public:
+    GraphicsDisplay(int gridSizex, int gridSizey, int winSizex, int winSizey);
+    
+    void notify(Subject &whoNotified) override;
+    
+    void updatenext(char next);
+    void updatelevel(int level);
+    void updatescore(int score);
+    void updatehiscore(int hiscore);
+    
 };
 #endif

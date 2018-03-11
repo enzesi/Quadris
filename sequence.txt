@@ -1,7 +1,1 @@
-I
-J
-L
-O
-S
-Z
-T
+I O J S Z T L

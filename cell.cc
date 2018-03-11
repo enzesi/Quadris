@@ -26,6 +26,10 @@ void Cell::settype(char type) {
     notifyObservers();
 }
 
+void Cell::cleartemp() {
+    this->empty = true;
+}
+
 void Cell::setempty(bool empty) {
     this->empty = empty;
     if (empty) {

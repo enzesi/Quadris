@@ -5,7 +5,9 @@
 #include <vector>
 #include "info.h"
 #include "subject.h"
-#include "observer.h"
+
+
+class Observer;
 
 class Cell: public Subject {
     int x, y;
@@ -14,11 +16,15 @@ class Cell: public Subject {
     bool empty = true;
 public:
     Cell(int x, int y);
+    // getter method;
     bool getempty() const;
     Info getInfo() const;
+    // setter method;
     void settype(char type);
     void setempty(bool empty);
     void setith(int ith);
+    // clean the current cell temprorily;
+    void cleartemp();
 };
 
 #endif
