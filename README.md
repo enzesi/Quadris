@@ -4,7 +4,7 @@ This is a game I created with my classmate Timmy(Jinyao) Lu and Ryan Misiak.
 
 Instructions
 
-A game of Quadris consists of a board, 11 columns wide and 15 rows high. Blocks consisting of
+A game of tetris consists of a board, 11 columns wide and 15 rows high. Blocks consisting of
 four cells (tetrominoes) appear at the top of the screen, and you must drop them onto the board
 so as not to leave any gaps. Once an entire row has been filled, it disappears, and the blocks above
 move down by one unit.
